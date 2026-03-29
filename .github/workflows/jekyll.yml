@@ -1,4 +1,54 @@
-# This workflow uses actions that are not certified by GitHub.
+This PR introduces ERC-BPA, a deterministic BORSH-based proof bundle attestation interface for multi-wallet portfolio verification across heterogeneous blockchain environments.
+
+ERC-BPA defines a portable serialization structure enabling contracts to publish structured asset attestations without requiring custodial aggregation layers or platform-specific governance dependencies.
+
+The proposal specifies:
+
+• deterministic BORSH encoding rules
+• canonical bundle ordering requirements
+• domain-separated namespace protection
+• signed bundle verification interface
+• multisignature bundle support
+• schema discovery interface
+• cross-chain replay protection guidance
+• aggregation interface for multi-wallet portfolio snapshots
+
+ERC-BPA is designed as a general-purpose infrastructure interface for:
+
+• treasury transparency workflows
+• cross-chain verification middleware
+• wallet-level portfolio attestations
+• institutional reporting layers
+• indexers and explorer integrations
+
+The specification remains platform-independent while being compatible with modular aggregation architectures such as the JustinPug contract suite.
+
+A minimal Solidity reference implementation and TypeScript BORSH decoding example are included to demonstrate interoperability across on-chain and off-chain environments.
+
+Feedback on serialization ordering guarantees, namespace structure, and signature verification interface design is especially welcome.https://github.com/ethereum/ERCshttps://ethereum-magicians.org[ERC Draft] ERC-BPA Cross-Multichain BORSH Serialization Standardstatus: Draft
+type: Standards Track
+category: ERCgithub.com/ethereum/ERCsProofBundle Byte Layout
+
+ERC-BPA bundles MUST follow deterministic BORSH serialization ordering.
+
+Canonical byte layout:
+
+Field| Size| Description
+domainSeparator| 32 bytes| Namespace + replay protection
+timestamp| 8 bytes| Unix timestamp
+verifier| 20 bytes| Attesting signer address
+sourceChainId| 8 bytes| Origin chain identifier
+assetCount| 4 bytes| Number of asset entries
+assetEntries[]| variable| Serialized AssetEntry array
+
+Each AssetEntry MUST follow:
+
+Field| Size| Description
+wallet| 20 bytes| Wallet address
+token| 20 bytes| Token contract address
+balance| 16 bytes| Token balance (u128)
+
+Wallet addresses MUST be sorted ascending prior to serialization to preserve deterministic bundle hashing across environments.# This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
